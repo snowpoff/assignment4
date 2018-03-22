@@ -1,6 +1,9 @@
 
 
-service: assignment2
+service: assignment3
+
+custom:
+  bucket: minidrop
 
 provider:
   name: aws
@@ -9,6 +12,7 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
+        - s3:*
         - dynamodb:DescribeTable
         - dynamodb:Query
         - dynamodb:Scan
@@ -16,16 +20,9 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource: "arn:aws:dynamodb:us-east-1:*:*"
+      Resource: "*"
 
 functions:
-  create:
-    handler: functions/create.create
-    events:
-      - http:
-          path: functions
-          method: post 
-          cors: true
   list:
     handler: functions/list.list
     events:
@@ -33,41 +30,32 @@ functions:
           path: functions
           method: get
           cors: true   
-  get:
-    handler: functions/get.get
-    events:
-      - http:
-          path: functions/{recipeId}
-          method: get
-          cors: true
-  update:
-    handler: functions/update.update
-    events:
-      - http:
-          path: functions/{recipeId}
-          method: put
-          cors: true
   delete:
     handler: functions/delete.delete
     events:
       - http:
-          path: functions/{recipeId}
-          method: delete
+          path: functions/{id}
+          method: put
           cors: true
-
+  upload:
+    handler: functions/upload.upload
+    events:
+      - s3:
+        bucket: ${self:custom.bucket}
+        event: s3:ObjectCreated:*
 
 
 resources:  
   Resources:
-    recipesTable:
+    minidboxTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
-        TableName: recipes
+        TableName: minidboxTable
         AttributeDefinitions:
-          - AttributeName: recipeId
+          - AttributeName: id
             AttributeType: S
         KeySchema:
-          - AttributeName: recipeId
+          - AttributeName: id
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1

@@ -4,14 +4,14 @@ const AWS = require('aws-sdk');
 const dynamo = new AWS.DynamoDB.DocumentClient();
 
 const params = {
-	TableName: 'recipes'
+	TableName: 'minidboxTable'
 };
 
 module.exports.list = (event, context, callback) => {
 	dynamo.scan(params, (error, result) =>{
 		if (error) {
 			console.error(error);
-			callback(new Error('Unable to get recipe list.'));
+			callback(new Error('Unable to get entry list.'));
 			return;
 		}
 
