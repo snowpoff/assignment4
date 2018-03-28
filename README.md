@@ -7,7 +7,7 @@ tested in postman/with mobile phone
 
 UPDATE TO ASSIGNMENT 3
 
-now has sns functionality - create a .env file with appropriate token/phone number information and should receive an sns when a file is uploaded (same method as in assignment 3, as outline belowed)
+now has sns functionality - create a .env file with appropriate token/phone number information and should receive an sns when a file is uploaded (same method as in assignment 3, as outlined below)
 
 ```
 endpoints:
